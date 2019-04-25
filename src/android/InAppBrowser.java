@@ -1446,6 +1446,20 @@ public class InAppBrowser extends CordovaPlugin {
             }
         }
 
+        public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorRes) {
+            super.onReceivedHttpError(view, request, errorRes);
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put("type", LOAD_ERROR_EVENT);
+                obj.put("url", request.getUrl().toString());
+                obj.put("code", errorRes.getStatusCode());
+                obj.put("message", "GSH Error!");
+                sendUpdate(obj, true, PluginResult.Status.ERROR);
+            } catch (JSONException ex) {
+                LOG.d(LOG_TAG, "Error Mag");
+            }
+        }
+
         /**
          * On received http auth request.
          */
